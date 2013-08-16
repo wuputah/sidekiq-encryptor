@@ -1,0 +1,17 @@
+language: ruby
+rvm:
+  - 2.0.0
+  - 1.9.3
+  - jruby-19mode
+  - rbx-19mode
+branches:
+  only:
+    - master
+notifications:
+  email:
+    recipients:
+      - gabe@ga.be
+matrix:
+  allow_failures:
+    - rvm: jruby-19mode
+    - rvm: rbx-19mode
