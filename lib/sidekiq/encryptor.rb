@@ -7,20 +7,35 @@ require 'sidekiq/encryptor/version'
 module Sidekiq
   class Encryptor
 
-    # Passes the worker, arguments, and queue to {RateLimit} and either yields
-    # or requeues the job depending on whether the worker is throttled.
-    #
-    # @param [Sidekiq::Worker] worker
-    #   The worker the job belongs to.
-    #
-    # @param [Hash] msg
-    #   The job message.
-    #
-    # @param [String] queue
-    #   The current queue.
-    def call(worker, msg, queue)
-      yield
+    Error = Class.new(::RuntimeError)
+    DecryptionError = Class.new(Error)
+
+    class Base
+      def initializer(options = {})
+        @key = options[:key]
+        @encryptor = ActiveSupport::MessageEncryptor.new(@key) if @key
+      end
     end
 
-  end # Throttler
+    class Client < Base
+      def call(worker, msg, queue)
+        return yield unless @key
+        yield worker,
+          @encryptor.encrypt_and_sign(Sidekiq.dump_json(msg)),
+          queue
+      end
+    end
+
+    class Server < Base
+      def call(worker, msg, queue)
+        return yield unless @key
+        yield worker,
+          Sidekiq.load_json(@encryptor.decrypt_and_verify(msg)),
+          queue
+      rescue ActiveSupport::MessageVerifier::InvalidSignature, ActiveSupport::MessageEncryptor::InvalidMessage
+        raise DecryptionError, "Unable to decrypt job payload"
+      end
+    end
+
+  end # Encryptor
 end # Sidekiq
