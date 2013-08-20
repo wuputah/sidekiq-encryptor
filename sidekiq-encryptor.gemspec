@@ -11,6 +11,7 @@ Gem::Specification.new do |gem|
   gem.description   = %q{Sidekiq middleware that encrypts your job data into and out of Redis.}
   gem.summary       = %q{Sidekiq::Encryptor is a middleware for Sidekiq that keeps your information safe by using 2-way encryption when storing and retrieving jobs from Redis.}
   gem.homepage      = 'https://github.com/wuputah/sidekiq-encryptor'
+  gem.license       = 'MIT'
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

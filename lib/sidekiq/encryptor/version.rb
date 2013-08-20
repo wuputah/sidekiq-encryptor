@@ -5,7 +5,7 @@ module Sidekiq
       MAJOR = 0
       MINOR = 0
       PATCH = 1
-      SUFFIX = "pre"
+      SUFFIX = ""
     end
 
     VERSION = "#{Version::MAJOR}.#{Version::MINOR}.#{Version::PATCH}#{Version::SUFFIX}"
