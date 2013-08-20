@@ -4,7 +4,7 @@
 
 require 'pathname'
 $LOAD_PATH.unshift(Pathname.getwd.join('lib').to_s)
-require 'sidekiq/throttler'
+require 'sidekiq/encryptor'
 
 def reload!
   Dir["#{Dir.pwd}/lib/**/*.rb"].each { |f| load f }
