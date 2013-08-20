@@ -8,9 +8,7 @@ branches:
   only:
     - master
 notifications:
-  email:
-    recipients:
-      - gabe@ga.be
+  email: false
 matrix:
   allow_failures:
     - rvm: jruby-19mode
