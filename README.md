@@ -48,9 +48,17 @@ Sidekiq.configure_client do |config|
 end
 ```
 
+You should also set `SIDEKIQ_ENCRYPTION_KEY` to something sufficiently
+random. The `openssl` tool is a good choice for this:
+
+  echo SIDEKIQ_ENCRYPTION_KEY=$(openssl rand -base64 48) >>.env
+  # if on Heroku...
+  heroku config:set SIDEKIQ_ENCRYPTION_KEY=$(openssl rand -base64 48)
+
 ## Contributing
 
-Pull requests gladly accepted. Please write tests for any code changes.
+Pull requests gladly accepted. Please write tests for any code changes,
+though I'll admit my test coverage is completely awful right now.
 
 ## License
 
