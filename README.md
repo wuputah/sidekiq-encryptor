@@ -34,16 +34,16 @@ key = ENV['SIDEKIQ_ENCRYPTION_KEY']
 
 Sidekiq.configure_server do |config|
   config.server_middleware do |chain|
-    chain.add Sidekiq::Encryptor::Server, key
+    chain.add Sidekiq::Encryptor::Server, key: key
   end
   config.client_middleware do |chain|
-    chain.add Sidekiq::Encryptor::Client, key
+    chain.add Sidekiq::Encryptor::Client, key: key
   end
 end
 
-sidekiq.configure_client do |config|
+Sidekiq.configure_client do |config|
   config.client_middleware do |chain|
-    chain.add Sidekiq::Encryptor::Client, key
+    chain.add Sidekiq::Encryptor::Client, key: key
   end
 end
 ```
