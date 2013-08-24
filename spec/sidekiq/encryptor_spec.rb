@@ -1,31 +1,59 @@
 require 'spec_helper'
+require 'securerandom'
 
 [Sidekiq::Encryptor::Client, Sidekiq::Encryptor::Server].each do |klass|
 
   describe klass do
 
-    subject(:middleware) do
-      described_class.new
-    end
+    raw_key = SecureRandom.random_bytes(32)
 
-    let(:worker) do
-      RegularWorker.new
-    end
+    {
+      'base64' => [raw_key].pack('m*'),
+      'hex' => raw_key.unpack('H*').first,
+      'binary' => raw_key
+    }.each_pair do |key_type, key|
 
-    let(:message) do
-      {
-        args: 'Clint Eastwood'
-      }
-    end
+      describe "with #{key_type} key" do
 
-    let(:queue) do
-      'default'
-    end
+        subject(:middleware) do
+          described_class.new(key: key)
+        end
 
-    describe '#call' do
+        let(:worker) do
+          RegularWorker.new
+        end
 
-      it 'yields' do
-        expect { |b| middleware.call(worker, message, queue, &b) }.to yield_with_no_args
+        let(:data) do
+          ['Clint Eastwood']
+        end
+
+        let(:args) do
+          {
+            Sidekiq::Encryptor::Client => data,
+            Sidekiq::Encryptor::Server => [
+              'Sidekiq::Encryptor',
+              1,
+              Fernet.generate(Base64.urlsafe_encode64(raw_key), JSON.dump(data))
+            ]
+          }
+        end
+
+        let(:message) do
+          { 'args' => args[klass] }
+        end
+
+        let(:queue) do
+          'default'
+        end
+
+        it { should be_enabled }
+
+        describe '#call' do
+
+          it 'yields' do
+            expect { |b| middleware.call(worker, message, queue, &b) }.to yield_with_no_args
+          end
+        end
       end
     end
   end

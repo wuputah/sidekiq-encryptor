@@ -19,7 +19,7 @@ require 'sidekiq/encryptor'
 # Autoload every worker for the test suite that sits in spec/app/workers
 Dir[File.join(WORKERS, '*.rb')].sort.each do |file|
   name = File.basename(file, '.rb')
-  autoload name.camelize.to_sym, name
+  require name
 end
 
 RSpec.configure do |config|
