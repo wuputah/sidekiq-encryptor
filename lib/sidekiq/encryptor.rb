@@ -30,7 +30,7 @@ module Sidekiq
       def call(worker, msg, queue)
         return yield unless @key
         if msg['args'][0] == 'Sidekiq::Encryptor'
-          if msg['args'][1] != Sidekiq::Encryptor::Version::MAJOR
+          if msg['args'][1] != Sidekiq::Encryptor::PROTOCOL_VERSION
             raise VersionChangeError, 'incompatible change detected'
           else
             msg['args'] = Sidekiq.load_json(@encryptor.decrypt_and_verify(msg['args'][2]))

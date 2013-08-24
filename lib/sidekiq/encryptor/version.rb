@@ -8,6 +8,8 @@ module Sidekiq
       SUFFIX = "pre"
     end
 
+    PROTOCOL_VERSION = 0
+
     VERSION = "#{Version::MAJOR}.#{Version::MINOR}.#{Version::PATCH}#{Version::SUFFIX}"
 
   end
