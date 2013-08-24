@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ['lib']
 
-  gem.add_dependency 'fernet', '>= 2.0rc1'
+  gem.add_dependency 'fernet', '>= 2.0rc1', '< 3.0'
   gem.add_dependency 'sidekiq', '>= 2.5', '< 3.0'
 
   gem.add_development_dependency 'rake'

@@ -53,8 +53,7 @@ random. The `openssl` tool is a good choice for this:
 
 ```sh
 echo SIDEKIQ_ENCRYPTION_KEY=$(openssl rand -base64 32) >>.env
-# if on Heroku...
-heroku config:set SIDEKIQ_ENCRYPTION_KEY=$(openssl rand -base64 48)
+heroku config:set SIDEKIQ_ENCRYPTION_KEY=$(openssl rand -base64 32)
 ```
 
 ## Contributing
