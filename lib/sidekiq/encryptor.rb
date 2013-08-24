@@ -119,6 +119,8 @@ module Sidekiq
               raise DecryptionError, 'key not identical or data was corrupted'
             Sidekiq.load_json(data)
           end
+        else
+          payload
         end
       end
 

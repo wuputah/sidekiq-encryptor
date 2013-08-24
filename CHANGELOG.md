@@ -1,5 +1,9 @@
 # sidekiq-encryptor changelog
 
+## 0.1.1
+
+Fix bug with processing unencrypted jobs.
+
 ## 0.1.0
 
 Backwards incompatible changes:
