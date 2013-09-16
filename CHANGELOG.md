@@ -1,5 +1,9 @@
 # sidekiq-encryptor changelog
 
+## 0.1.3
+
+Fix bug with Ruby 1.9 compatibility.
+
 ## 0.1.2
 
 Upgrade to Fernet 2.0rc2.
