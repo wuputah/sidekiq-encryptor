@@ -69,7 +69,7 @@ module Sidekiq
         elsif key.bytesize < 32
           $stderr.puts '[sidekiq-encryptor] ERROR: key length less than 256 bits, encryption disabled'
         else
-          key.bytes[0,32].pack('C*')
+          key.bytes.to_a[0,32].pack('C*')
         end
       end
 
