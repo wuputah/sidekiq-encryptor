@@ -1,5 +1,9 @@
 # sidekiq-encryptor changelog
 
+## 0.1.2
+
+Upgrade to Fernet 2.0rc2.
+
 ## 0.1.1
 
 Fix bug with processing unencrypted jobs.
