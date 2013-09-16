@@ -1,6 +1,3 @@
-# stdlib
-require 'base64'
-
 # gems
 require 'sidekiq'
 require 'fernet'
@@ -17,13 +14,13 @@ module Sidekiq
 
     module FernetAdapter
       def self.encrypt(key, data)
-        Fernet.generate(Base64.urlsafe_encode64(key), data)
+        Fernet.generate(key, data)
       end
 
       def self.decrypt(key, data)
         verifier = Fernet::Verifier.new(
           token: data,
-          secret: Base64.urlsafe_encode64(key),
+          secret: key,
           enforce_ttl: false)
         verifier.valid? ? verifier.message : nil
       rescue OpenSSL::Cipher::CipherError
@@ -69,10 +66,10 @@ module Sidekiq
       def validate_key(key)
         if key.nil?
           $stderr.puts '[sidekiq-encryptor] ERROR: no key provided, encryption disabled'
-        elsif key.length < 32
+        elsif key.bytesize < 32
           $stderr.puts '[sidekiq-encryptor] ERROR: key length less than 256 bits, encryption disabled'
         else
-          key[0,32]
+          key.bytes[0,32].pack('C*')
         end
       end
 
