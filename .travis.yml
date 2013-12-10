@@ -3,7 +3,7 @@ rvm:
   - 2.0.0
   - 1.9.3
   - jruby-19mode
-  - rbx-19mode
+  - rbx
 branches:
   only:
     - master
@@ -12,4 +12,4 @@ notifications:
 matrix:
   allow_failures:
     - rvm: jruby-19mode
-    - rvm: rbx-19mode
+    - rvm: rbx
