@@ -182,9 +182,9 @@ module Sidekiq
         msg['args'] = payload(msg['args'], worker_class)
         yield
       end
-
+    
     private
-
+      
       # Encrypts Sidekiq worker args based on the
       # encryption options specified in a worker
       # class.
@@ -326,7 +326,7 @@ module Sidekiq
           arg
         end
       end
-
+      
       def version_changed?(input)
         input[1] != Sidekiq::Encryptor::PROTOCOL_VERSION
       end
