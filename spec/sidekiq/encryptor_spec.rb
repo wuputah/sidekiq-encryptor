@@ -20,7 +20,10 @@ require 'securerandom'
         end
 
         let(:worker) do
-          RegularWorker.new
+          {
+            Sidekiq::Encryptor::Client => RegularWorker,
+            Sidekiq::Encryptor::Server => RegularWorker.new
+          }[klass]
         end
 
         let(:data) do
