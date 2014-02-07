@@ -144,7 +144,7 @@ module Sidekiq
       def encrypted?(input)
         input.is_a?(Array) && input.size == 3 && input.first == 'Sidekiq::Encryptor'
       end
-
+      
     private
 
       def compact_key(key)
@@ -277,7 +277,7 @@ module Sidekiq
       # @param input [Object] The value to encrypt
       # @return [String] Returns an encrypted value
       def encrypt(input)
-        @adapter.encrypt(@key, Sidekiq.dump_json([input]))
+        @adapter.encrypt(@key, Sidekiq.dump_json(['Sidekiq::Encryptor::Wrapper', input]))
       end
 
     end
@@ -314,7 +314,7 @@ module Sidekiq
           else
             data = decrypt(arg) or
               raise DecryptionError, 'key not identical or data was corrupted'
-            Sidekiq.load_json(data)[0]
+            Sidekiq.load_json(data)
           end
         elsif arg.is_a?(Array)
           arg.map{|item| decrypt_nested(item)}
@@ -332,7 +332,13 @@ module Sidekiq
       end
 
       def decrypt(input)
-        @adapter.decrypt(@key, input[2])
+        decrypted = @adapter.decrypt(@key, input[2])
+        
+        if decrypted.is_a?(Array) && decrypted.size == 2 && decrypted.first == 'Sidekiq::Encryptor::Wrapper'
+          decrypted.last
+        else
+          decrypted
+        end
       end
 
     end
