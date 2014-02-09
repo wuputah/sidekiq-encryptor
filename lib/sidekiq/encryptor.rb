@@ -179,6 +179,7 @@ module Sidekiq
 
     class Client < Base
       def call(worker_class, msg, queue, redis_pool = nil)
+        worker_class = Kernel.const_get(worker_class) if worker_class.is_a?(String)
         msg['args'] = payload(msg['args'], worker_class)
         yield
       end
