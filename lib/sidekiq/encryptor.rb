@@ -315,7 +315,14 @@ module Sidekiq
           else
             data = decrypt(arg) or
               raise DecryptionError, 'key not identical or data was corrupted'
-            Sidekiq.load_json(data)
+            
+            decrypted = Sidekiq.load_json(data)
+            
+            if decrypted.is_a?(Array) && decrypted.size == 2 && decrypted.first == 'Sidekiq::Encryptor::Wrapper'
+              decrypted[1]
+            else
+              decrypted
+            end
           end
         elsif arg.is_a?(Array)
           arg.map{|item| decrypt_nested(item)}
@@ -333,13 +340,7 @@ module Sidekiq
       end
 
       def decrypt(input)
-        decrypted = @adapter.decrypt(@key, input[2])
-        
-        if decrypted.is_a?(Array) && decrypted.size == 2 && decrypted.first == 'Sidekiq::Encryptor::Wrapper'
-          decrypted.last
-        else
-          decrypted
-        end
+        @adapter.decrypt(@key, input[2])
       end
 
     end
