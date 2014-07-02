@@ -76,7 +76,7 @@ module Sidekiq
     end
 
     class Client < Base
-      def call(worker, msg, queue)
+      def call(worker, msg, queue, redis_pool)
         return yield unless enabled?
         msg['args'] = payload(msg['args'])
         yield

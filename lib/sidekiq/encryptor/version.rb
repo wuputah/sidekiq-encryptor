@@ -3,9 +3,9 @@ module Sidekiq
 
     module Version
       MAJOR = 0
-      MINOR = 1
-      PATCH = 3
-      SUFFIX = ""
+      MINOR = 2
+      PATCH = 0
+      SUFFIX = "pre"
     end
 
     PROTOCOL_VERSION = 1

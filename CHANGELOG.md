@@ -1,5 +1,12 @@
 # sidekiq-encryptor changelog
 
+## 0.2.0
+
+Upgrade to Sidekiq 3 API and require Sidekiq 3.
+
+Sidekiq 2 compatibility is not maintained at this time. Users of Sidekiq
+2 can use prior versions of the gem.
+
 ## 0.1.3
 
 Fix bug with Ruby 1.9 compatibility.

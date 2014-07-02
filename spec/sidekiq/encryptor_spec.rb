@@ -39,11 +39,15 @@ require 'securerandom'
         end
 
         let(:message) do
-          { 'args' => args[klass] }
+          { 'args' => args[described_class] }
         end
 
         let(:queue) do
           'default'
+        end
+
+        let(:redis_pool) do
+          nil
         end
 
         it { should be_enabled }
@@ -51,7 +55,12 @@ require 'securerandom'
         describe '#call' do
 
           it 'yields' do
-            expect { |b| middleware.call(worker, message, queue, &b) }.to yield_with_no_args
+            case described_class
+            when Sidekiq::Encryptor::Client
+              expect { |b| middleware.call(worker, message, queue, redis_pool, &b) }.to yield_with_no_args
+            when Sidekiq::Encryptor::Server
+              expect { |b| middleware.call(worker, message, queue, &b) }.to yield_with_no_args
+            end
           end
         end
       end
