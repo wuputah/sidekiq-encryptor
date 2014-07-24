@@ -116,8 +116,6 @@ module Sidekiq
       # Get encryption options from middleware config
       # and Sidekiq options in the worker class.
       #
-      # @note 
-      #
       # @param worker_class [Sidekiq::Worker]
       # @return [Hash] Returns 
       def encryption_options(worker_class = nil)
