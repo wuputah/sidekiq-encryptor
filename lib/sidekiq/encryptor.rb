@@ -30,6 +30,7 @@ module Sidekiq
 
     class Base
       def initialize(options = {})
+        @silent = options[:silent] || false
         @key = validate_key(compact_key(options[:key]))
         @adapter = options[:adapter] || FernetAdapter
       end
@@ -65,9 +66,9 @@ module Sidekiq
 
       def validate_key(key)
         if key.nil?
-          $stderr.puts '[sidekiq-encryptor] ERROR: no key provided, encryption disabled'
+          $stderr.puts '[sidekiq-encryptor] ERROR: no key provided, encryption disabled' unless @silent
         elsif key.bytesize < 32
-          $stderr.puts '[sidekiq-encryptor] ERROR: key length less than 256 bits, encryption disabled'
+          $stderr.puts '[sidekiq-encryptor] ERROR: key length less than 256 bits, encryption disabled' unless @slient
         else
           key.bytes.to_a[0,32].pack('C*')
         end
